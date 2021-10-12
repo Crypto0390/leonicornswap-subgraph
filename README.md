@@ -8,9 +8,9 @@ Currently, there are multiple subgraphs, but additional subgraphs can be added t
 
 1. **[Blocks](https://thegraph.com/hosted-service/subgraph/crypto0390/blocks)**: Tracks all blocks on Binance Smart Chain.
 
-2. **[Exchange](https://api.thegraph.com/subgraphs/name/crypto0390/exchange)**: Tracks all Leonicornswap Exchange data with price, volume, liquidity, ...
+2. **[Exchange](https://thegraph.com/hosted-service/subgraph/crypto0390/exchange)**: Tracks all Leonicornswap Exchange data with price, volume, liquidity, ...
 
-3. **[Pairs](https://api.thegraph.com/subgraphs/name/crypto0390/pairs)**: Tracks all Leonicornswap Pairs and Tokens.
+3. **[Pairs](https://thegraph.com/hosted-service/subgraph/crypto0390/pairs)**: Tracks all Leonicornswap Pairs and Tokens.
 
 ## Dependencies
 
