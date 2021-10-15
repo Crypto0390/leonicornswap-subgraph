@@ -6,7 +6,7 @@ import { ERC20SymbolBytes } from "../../generated/Factory/ERC20SymbolBytes";
 import { Factory as FactoryContract } from "../../generated/templates/Pair/Factory";
 
 export let ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
-export let FACTORY_ADDRESS = "0xEbc1dCFa279D4aF03053dfAf50D8AcF36ff136d6";
+export let FACTORY_ADDRESS = "0xEB10f4Fe2A57383215646b4aC0Da70F8EDc69D4F";
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
@@ -80,5 +80,5 @@ export function fetchTokenDecimals(tokenAddress: Address): BigInt {
   if (!decimalResult.reverted) {
     decimalValue = decimalResult.value;
   }
-  return BigInt.fromI32(decimalValue as i32);
+  return BigInt.fromI32(decimalValue);
 }

@@ -8,6 +8,6 @@
   "scripts": {
     "codegen": "graph codegen subgraph.yaml",
     "build": "graph build subgraph.yaml",
-    "deploy": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ crypto0390/blocks subgraph.yaml"
+    "deploy": "graph deploy --product hosted-service --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ crypto0390/Bscblocks subgraph.yaml"
   }
 }
