@@ -5,33 +5,59 @@ import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from "./utils";
 
 let WBNB_ADDRESS = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 let BUSD_WBNB_PAIR = "0x460e728c0e5ef94f179fc8d345647d2e7d7c07ee"; // created block 11738022
+let DAI_WBNB_PAIR = '0x0a627b91d3f66ea074279912c9df761a609d4f6d';  
+let USDT_WBNB_PAIR = '0x6b3917d49fdcddb30a56eb61e787dd4302fa7f2d'; 
 
 export function getBnbPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
-  let busdPair = Pair.load(BUSD_WBNB_PAIR); // busd is token1
-  if (busdPair !== null) {
-    return busdPair.token1Price;
+  let usdtPair = Pair.load(USDT_WBNB_PAIR) // usdt is token0
+  let busdPair = Pair.load(BUSD_WBNB_PAIR) // busd is token1
+  let daiPair = Pair.load(DAI_WBNB_PAIR)   // dai is token0
+
+  // all 3 have been created
+  if (daiPair !== null && busdPair !== null && usdtPair !== null) {
+    let totalLiquidityBNB = daiPair.reserve1.plus(busdPair.reserve0).plus(usdtPair.reserve1)
+    let daiWeight = daiPair.reserve1.div(totalLiquidityBNB)
+    let busdWeight = busdPair.reserve0.div(totalLiquidityBNB)
+    let usdtWeight = usdtPair.reserve1.div(totalLiquidityBNB)
+    return daiPair.token0Price
+      .times(daiWeight)
+      .plus(busdPair.token1Price.times(busdWeight))
+      .plus(usdtPair.token0Price.times(usdtWeight))
+    // busd and usdt have been created
+  } else if (busdPair !== null && usdtPair !== null) {
+    let totalLiquidityBNB = busdPair.reserve0.plus(usdtPair.reserve1)
+    let busdWeight = busdPair.reserve0.div(totalLiquidityBNB)
+    let usdtWeight = usdtPair.reserve1.div(totalLiquidityBNB)
+    return busdPair.token1Price.times(busdWeight).plus(usdtPair.token0Price.times(usdtWeight))
+    // usdt is the only pair so far
+  } else if (busdPair !== null) {
+    return busdPair.token1Price
+  } else if (usdtPair !== null) {
+    return usdtPair.token0Price
   } else {
-    return ZERO_BD;
+    return ZERO_BD
   }
 }
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", // WBNB
-  "0xe9e7cea3dedca5984780bafc599bd69add087d56", // BUSD
-  "0x55d398326f99059ff775485246999027b3197955", // USDT
-  "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d", // USDC
-  "0x23396cf899ca06c4472205fc903bdb4de249d6fc", // UST
-  "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c", // BTCB
-  "0x2170ed0880ac9a755fd29b2688956bd959f933f8", // WETH
+  '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', // WBNB
+  '0xe9e7cea3dedca5984780bafc599bd69add087d56', // BUSD
+  '0x55d398326f99059ff775485246999027b3197955', // USDT
+  '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d', // USDC
+  '0x23396cf899ca06c4472205fc903bdb4de249d6fc', // UST
+  '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3', // DAI
+  '0x4bd17003473389a42daf6a0a729f6fdb328bbbd7', // VAI
+  '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c', // BTCB
+  '0x2170ed0880ac9a755fd29b2688956bd959f933f8', // WETH
+  '0x250632378e573c6be1ac2f97fcdf00515d0aa91b', // BETH
   "0x27e873bee690c8e161813de3566e9e18a64b0381", // LEON
   "0x55d398326f99059ff775485246999027b3197955", // LEOS
-
 ];
 
 // minimum liquidity for price to get tracked
-let MINIMUM_LIQUIDITY_THRESHOLD_BNB = BigDecimal.fromString("0");
+let MINIMUM_LIQUIDITY_THRESHOLD_BNB = BigDecimal.fromString("2");
 
 /**
  * Search through graph to find derived BNB per token.
